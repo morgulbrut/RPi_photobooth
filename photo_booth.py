@@ -43,6 +43,21 @@ while True:
         snap += 1
       GPIO.output(POSE_LED, False)
       time.sleep(0.5)
+def wait_for_camera():
+    cam_ready = False
+    print("Waiting for camera")
+    while cam_ready == False:
+        GPIO.output(PRINT_LED, False)
+        time.sleep(0.2)
+        try: 
+            gpout = subprocess.check_output("gphoto2 -l", stderr=subprocess.STDOUT, shell=True)
+            print(gpout)
+            cam_ready = True
+        except:
+            print("...")
+        GPIO.output(PRINT_LED, True)
+        time.sleep(0.2)
+            wait_for_camera()
     print("please wait while your photos print...")
     GPIO.output(PRINT_LED, True)
     # build image and send to printer

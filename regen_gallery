@@ -1,0 +1,53 @@
+#!/bin/sh
+
+PWD=$(pwd)
+
+cd /home/pi/PB_archive
+
+cat << EOL > index.html 
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  background-color: gray;
+}
+
+div.gallery {
+  margin: 5px;
+  float: left;
+  width: 200px;
+}
+
+div.gallery img {
+  width: 100%;
+  height: auto;
+}
+
+div.desc {
+  padding: 15px;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+EOL
+
+for img in *.jpg
+do
+cat << EOL >>index.html
+<div class="gallery">
+  <a target="_blank" href="$img">
+    <img src="$img">
+  </a>
+</div>
+EOL
+done
+
+cat << EOL >>index.html
+</div>
+</body>
+</html>
+EOL
+
+cd $PWD

@@ -2,8 +2,8 @@
 
 import RPi.GPIO as GPIO, time, os, subprocess
 
-# GPIO setup
-GPIO.setmode(GPIO.BCM)
+import http.server
+import socketserver
 SWITCH = 24
 GPIO.setup(SWITCH, GPIO.IN)
 RESET = 25
@@ -11,7 +11,28 @@ GPIO.setup(RESET, GPIO.IN)
 PRINT_LED = 22
 POSE_LED = 18
 BUTTON_LED = 23
-GPIO.setup(POSE_LED, GPIO.OUT)
+
+
+def start_webserver(directory):
+    PORT = 8000
+
+    pwd = os.curdir
+    os.chdir('/home/pi/PB_archive')
+
+    Handler = http.server.SimpleHTTPRequestHandler
+    httpd = socketserver.TCPServer(("", PORT), Handler)
+    print("serving at port", PORT)
+    httpd.serve_forever()
+
+    os.chdir(pwd)
+
+
+def setup_io():
+    # GPIO setup
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(SWITCH, GPIO.IN)
+    GPIO.setup(RESET, GPIO.IN)
+    GPIO.setup(POSE_LED, GPIO.OUT)
 GPIO.setup(BUTTON_LED, GPIO.OUT)
 GPIO.setup(PRINT_LED, GPIO.OUT)
 GPIO.output(BUTTON_LED, True)
